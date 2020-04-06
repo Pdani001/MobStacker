@@ -14,9 +14,7 @@ public class OnEntityDespawn implements Listener{
     @EventHandler
     public void onDespawnEvent(ItemDespawnEvent e){
         if(e.getEntity() instanceof LivingEntity){
-            if (MobStacker.getInstance().getEntityStacker().getValidEntity().contains(e.getEntity())) {
-                MobStacker.getInstance().getEntityStacker().getValidEntity().remove(e.getEntity());
-            }
+            MobStacker.getInstance().getEntityStacker().getValidEntity().remove(e.getEntity());
         }
     }
 }

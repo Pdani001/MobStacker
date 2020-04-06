@@ -20,10 +20,6 @@ public class OnEntityDeath implements Listener{
 
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityDeath(EntityDeathEvent e) {
-        if (!(e.getEntity() instanceof LivingEntity)) {
-            return; // Not a living entity.
-        }
-
         LivingEntity entity =  e.getEntity();
 
         if(entity.getType() == EntityType.ARMOR_STAND || entity.getType() == EntityType.SLIME){

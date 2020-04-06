@@ -4,10 +4,10 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import me.jet315.stacker.MobStacker;
 import me.jet315.stacker.events.OnEntityDespawn;
 import me.jet315.stacker.events.OnEntitySpawn;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,6 +15,7 @@ import org.bukkit.entity.EntityType;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class Config {
     /** The mob stack radius. Mobs of the same type within this radius will be stacked. */
     public int stackRadius = 1;
     /** The mob types that we want to stack. */
-    public Set<EntityType> mobsToStack = new HashSet<EntityType>();
+    public HashMap<EntityType, Integer> mobsToStack = new HashMap<>();
     /** The update delay for mob stacking, in ticks. */
     public int updateTickDelay = 20;
     /**Stores the worlds where mobs should not stack */
@@ -45,8 +46,6 @@ public class Config {
     public boolean stackLeachedMobs = false;
     /**Stores whether to kill the whole mob stack on fall*/
     public boolean killMobStackOnFall = true;
-    /**Stores the maximum allowed in a stack*/
-    public int maxAllowedInStack = 500;
 
     /**
      * Stores what should be displayed over the mbos head
@@ -72,9 +71,8 @@ public class Config {
     public void reloadConfig() {
         boolean stackOnlySpawnerMobsBefore = stackOnlySpawnerMobs;
         stackRadius = configFile.getInt("StackRadius");
-        compileEntityTypesList(configFile.getStringList("MobTypes")); // Load EntityTypes list (mobTypes)
+        compileEntityTypesList(configFile.getConfigurationSection("MobTypes")); // Load EntityTypes list (mobTypes)
         updateTickDelay = configFile.getInt("UpdateTickDelay");
-        maxAllowedInStack = configFile.getInt("MaxAllowedInStack");
         String stackFormat = configFile.getString("StackFormat");
         stackMobsDispalyName = ChatColor.translateAlternateColorCodes('&',stackFormat);
         for(String s : stackFormat.split(" ")){
@@ -104,13 +102,13 @@ public class Config {
     /*
      * Helping Methods
      */
-    private void compileEntityTypesList(List<String> list) {
-        if (list == null || list.size() == 0) return; // List may be nothing
+    private void compileEntityTypesList(ConfigurationSection list) {
+        if (list == null || list.getKeys(false).size() == 0) return; // List may be nothing
 
-        for (String entityName : list) {
+        for (String entityName : list.getKeys(false)) {
             try {
                 EntityType entityType = EntityType.valueOf(entityName.toUpperCase());
-                this.mobsToStack.add(entityType);
+                this.mobsToStack.put(entityType,list.getInt(entityName));
             } catch (IllegalArgumentException ex) {
                 System.out.println("======= MOB STACKER =======");
                 System.out.println("INVALID MOB TYPE DETECTED: "+ entityName);

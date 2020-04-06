@@ -76,7 +76,7 @@ public class StackEntity {
         if (isStacked(stackee)) {
             stackedMobsAlready = parseAmount(stackee.getCustomName());
         }
-        if(stackedMobsAlready >= MobStacker.getInstance().getMobStackerConfig().maxAllowedInStack || alreadyStacked >= MobStacker.getInstance().getMobStackerConfig().maxAllowedInStack) return false;
+        if(stackedMobsAlready >= MobStacker.getInstance().getMobStackerConfig().mobsToStack.get(stackee.getType()) || alreadyStacked >= MobStacker.getInstance().getMobStackerConfig().mobsToStack.get(stackee.getType())) return false;
         stackee.remove();
         MobStacker.getInstance().getEntityStacker().getValidEntity().remove(stackee);
         if (alreadyStacked == INVALID_STACK) {

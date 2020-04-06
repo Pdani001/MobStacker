@@ -21,10 +21,10 @@ StackRadius: 2
 #Use https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html
 #For a valid list of entities - Slimes NOT Supported in this build
 MobTypes:
-    - ZOMBIE
-    - PIG_ZOMBIE
-    - SPIDER
-    - CREEPER
+  ZOMBIE: 500
+  PIG_ZOMBIE: 400
+  SPIDER: 300
+  CREEPER: 50
 
 
 # The update delay for stacking mobs, in ticks (20 per second).
@@ -32,9 +32,6 @@ MobTypes:
 # Suggested: 20-100 (Default 60)
 # (Server Restart suggested after changing this - /ms reload may not work)
 UpdateTickDelay: 60
-
-#The max of mobs allowed in a stack
-MaxAllowedInStack: 500
 
 # The format over the mobs heads
 # Use %number% to replace the number of stacked mobs

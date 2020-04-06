@@ -1,8 +1,10 @@
 name: MobStacker
-version: 1.0
+version: '1.8'
+api-version: '1.14'
 description: Stacks Mobs based on a range of Configuration Options!
 main: me.jet315.stacker.MobStacker
 softdepend: [WorldGuard]
+authors: [Jet315,Pdani001]
 commands:
   mobstacker:
     usage: /ms - The base mobstacker command

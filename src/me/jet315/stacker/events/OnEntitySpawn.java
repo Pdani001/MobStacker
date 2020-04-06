@@ -16,7 +16,7 @@ public class OnEntitySpawn implements Listener {
     @EventHandler
     public void onSpawn(CreatureSpawnEvent e) {
         if (e.getSpawnReason() == CreatureSpawnEvent.SpawnReason.SPAWNER) {
-            if (MobStacker.getInstance().getMobStackerConfig().mobsToStack.contains(e.getEntityType())) {
+            if (MobStacker.getInstance().getMobStackerConfig().mobsToStack.containsKey(e.getEntityType())) {
                 MobStacker.getInstance().getEntityStacker().getValidEntity().add(e.getEntity());
             }
         }

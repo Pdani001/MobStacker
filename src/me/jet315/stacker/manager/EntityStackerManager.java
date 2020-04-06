@@ -1,17 +1,17 @@
 package me.jet315.stacker.manager;
 
-import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldguard.bukkit.WGBukkit;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
 import me.jet315.stacker.MobStacker;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -21,13 +21,13 @@ import java.util.Set;
 public class EntityStackerManager {
 
     private int mobStackRadius;
-    private Set<EntityType> entitiesToStack;
+    private HashMap<EntityType,Integer> entitiesToStack;
     private ArrayList<LivingEntity> validEnity = new ArrayList<>();
     private ArrayList<LivingEntity> entitiesToMultiplyOnDeath = new ArrayList<>();
 
     private ArrayList<String> instantKillPlayers = new ArrayList<>();
 
-    public EntityStackerManager(int mobStackRadius, Set<EntityType> entitiesToStack) {
+    public EntityStackerManager(int mobStackRadius, HashMap<EntityType,Integer> entitiesToStack) {
         this.mobStackRadius = mobStackRadius;
         this.entitiesToStack = entitiesToStack;
         startEntityClock();
@@ -73,12 +73,14 @@ public class EntityStackerManager {
         if (entity.getType() == EntityType.PLAYER) {
             return false;
         }
-        if(!entitiesToStack.contains(entity.getType())){
+        if(!entitiesToStack.containsKey(entity.getType())){
             return false;
         }
         if(MobStacker.getInstance().getMobStackerConfig().worldguardEnabled) {
-            ApplicableRegionSet region = WGBukkit.getRegionManager(entity.getWorld()).getApplicableRegions(entity.getLocation());
-            for(ProtectedRegion r : region.getRegions()){
+            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+            RegionManager regions = container.get(BukkitAdapter.adapt(entity.getWorld()));
+            if(regions == null) return false;
+            for(ProtectedRegion r : regions.getRegions().values()){
                 for(String s : MobStacker.getInstance().getMobStackerConfig().disabledRegions){
                     if(r.getId().equalsIgnoreCase(s)){
                         return false;

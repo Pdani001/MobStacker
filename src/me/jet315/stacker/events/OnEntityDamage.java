@@ -17,7 +17,7 @@ public class OnEntityDamage implements Listener{
         if(!(e.getEntity() instanceof Player) && e.getEntity() instanceof LivingEntity){
                 if(e.getCause().equals(EntityDamageEvent.DamageCause.FALL)){
                     if(e.getEntity().getFallDistance() > 15 && e.getFinalDamage() >= 20){
-                        if(MobStacker.getInstance().getMobStackerConfig().mobsToStack.contains(e.getEntityType()) && MobStacker.getInstance().getMobStackerConfig().killMobStackOnFall)
+                        if(MobStacker.getInstance().getMobStackerConfig().mobsToStack.containsKey(e.getEntityType()) && MobStacker.getInstance().getMobStackerConfig().killMobStackOnFall)
                         MobStacker.getInstance().getEntityStacker().getEntitiesToMultiplyOnDeath().add((LivingEntity) e.getEntity());
                     }
 
