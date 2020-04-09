@@ -31,6 +31,8 @@ public class Config {
     public int stackRadius = 1;
     /** The mob types that we want to stack. */
     public HashMap<EntityType, Integer> mobsToStack = new HashMap<>();
+    /** The minimum amount to check from. */
+    public HashMap<EntityType, Integer> mobsMinimum = new HashMap<>();
     /** The update delay for mob stacking, in ticks. */
     public int updateTickDelay = 20;
     /**Stores the worlds where mobs should not stack */
@@ -74,13 +76,13 @@ public class Config {
         compileEntityTypesList(configFile.getConfigurationSection("MobTypes")); // Load EntityTypes list (mobTypes)
         updateTickDelay = configFile.getInt("UpdateTickDelay");
         String stackFormat = configFile.getString("StackFormat");
+        stackFormat = (stackFormat == null) ? "&a&l%number% &6&l%type%" : stackFormat;
         stackMobsDispalyName = ChatColor.translateAlternateColorCodes('&',stackFormat);
         for(String s : stackFormat.split(" ")){
             if(s.contains("%number%")){
                 break;
             }else{
                 indexLocation++;
-                continue;
             }
         }
 
@@ -108,7 +110,13 @@ public class Config {
         for (String entityName : list.getKeys(false)) {
             try {
                 EntityType entityType = EntityType.valueOf(entityName.toUpperCase());
-                this.mobsToStack.put(entityType,list.getInt(entityName));
+                if (!list.isConfigurationSection(entityName)) {
+                    this.mobsToStack.put(entityType, list.getInt(entityName));
+                    this.mobsMinimum.put(entityType, 1);
+                } else {
+                    this.mobsToStack.put(entityType, list.getInt(entityName + ".amount"));
+                    this.mobsMinimum.put(entityType, list.getInt(entityName + ".min"));
+                }
             } catch (IllegalArgumentException ex) {
                 System.out.println("======= MOB STACKER =======");
                 System.out.println("INVALID MOB TYPE DETECTED: "+ entityName);
@@ -124,7 +132,6 @@ public class Config {
             if(world == null){
                 System.out.println("======= MOB STACKER =======");
                 System.out.println("INVALID WORLD NAME DETECTED: "+ worldName);
-                continue;
             }else{
                 this.disabledWorlds.add(world);
             }
@@ -138,9 +145,6 @@ public class Config {
         }
         worldguardEnabled = true;
 
-        for (String regionName : list) {
-            disabledRegions.add(regionName);
-
-        }
+        disabledRegions.addAll(list);
     }
 }

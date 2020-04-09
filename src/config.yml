@@ -25,6 +25,9 @@ MobTypes:
   PIG_ZOMBIE: 400
   SPIDER: 300
   CREEPER: 50
+  COW:
+    min: 4
+    amount: 2
 
 
 # The update delay for stacking mobs, in ticks (20 per second).

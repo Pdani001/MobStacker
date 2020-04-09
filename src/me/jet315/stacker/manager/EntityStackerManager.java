@@ -12,8 +12,6 @@ import org.bukkit.entity.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Jet on 24/01/2018.
@@ -35,25 +33,28 @@ public class EntityStackerManager {
     }
 
     private void startEntityClock(){
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(MobStacker.getInstance(), new Runnable() {
-            public void run() {
-                // Iterate through all worlds
-                for (World world : Bukkit.getServer().getWorlds()) {
-                    // Iterate through all entities in this world (if not disabled)
-                    if(MobStacker.getInstance().getMobStackerConfig().disabledWorlds.contains(world)) continue;
-                    for (LivingEntity entity : world.getLivingEntities()) {
-                        if(!checkEntity(entity)) continue;
-                        // Iterate through all entities in range
-                        for (Entity nearby : entity.getNearbyEntities(mobStackRadius, mobStackRadius, mobStackRadius)) {
-
-                            if(checkEntity(nearby)) {
-                                MobStacker.getInstance().getStackEntity().stack(entity, (LivingEntity) nearby);
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(MobStacker.getInstance(), () -> {
+            // Iterate through all worlds
+            for (World world : Bukkit.getServer().getWorlds()) {
+                // Iterate through all entities in this world (if not disabled)
+                if(MobStacker.getInstance().getMobStackerConfig().disabledWorlds.contains(world)) continue;
+                for (LivingEntity entity : world.getLivingEntities()) {
+                    if(!checkEntity(entity)) continue;
+                    // Iterate through all entities in range
+                    int num = 1;
+                    for (Entity nearby : entity.getNearbyEntities(mobStackRadius, mobStackRadius, mobStackRadius)) {
+                        if(checkEntity(nearby)) {
+                            int min = MobStacker.getInstance().getMobStackerConfig().mobsMinimum.getOrDefault(nearby, 1);
+                            if(num < min){
+                                num++;
+                                continue;
                             }
+                            MobStacker.getInstance().getStackEntity().stack(entity, (LivingEntity) nearby);
                         }
                     }
                 }
-
             }
+
         }, 20L, MobStacker.getInstance().getMobStackerConfig().updateTickDelay);
 
     }
@@ -97,15 +98,11 @@ public class EntityStackerManager {
             }
         }
         if(MobStacker.getInstance().getMobStackerConfig().stackOnlySpawnerMobs){
-            if (!validEnity.contains((LivingEntity) entity)){
+            if (!validEnity.contains(entity)){
                 return false;
             }
         }
-        if(entity.getType() == EntityType.SLIME){
-            return false;
-
-        }
-        return true;
+        return entity.getType() != EntityType.SLIME;
     }
 
     public ArrayList<LivingEntity> getValidEntity() {
