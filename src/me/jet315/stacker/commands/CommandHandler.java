@@ -1,6 +1,5 @@
 package me.jet315.stacker.commands;
 
-import com.sun.istack.internal.NotNull;
 import me.jet315.stacker.commands.admincommands.KillAllCommand;
 import me.jet315.stacker.commands.admincommands.ReloadCommand;
 import org.bukkit.ChatColor;
@@ -24,7 +23,7 @@ public class CommandHandler implements org.bukkit.command.CommandExecutor {
         commands.put("reload", new ReloadCommand());
         commands.put("killall", new KillAllCommand());
     }
-    
+
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
 
         if (cmd.getName().equalsIgnoreCase("mobstacker")) {
