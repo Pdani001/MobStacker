@@ -44,7 +44,7 @@ public class EntityStackerManager {
                     int num = 1;
                     for (Entity nearby : entity.getNearbyEntities(mobStackRadius, mobStackRadius, mobStackRadius)) {
                         if(checkEntity(nearby)) {
-                            int min = MobStacker.getInstance().getMobStackerConfig().mobsMinimum.getOrDefault(nearby, 1);
+                            int min = MobStacker.getInstance().getMobStackerConfig().mobsMinimum.getOrDefault(nearby.getType(), 1);
                             if(num < min){
                                 num++;
                                 continue;

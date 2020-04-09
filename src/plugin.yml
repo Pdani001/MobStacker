@@ -1,5 +1,5 @@
 name: MobStacker
-version: '1.9.1'
+version: '1.9.2'
 api-version: '1.14'
 description: Stacks Mobs based on a range of Configuration Options!
 main: me.jet315.stacker.MobStacker
