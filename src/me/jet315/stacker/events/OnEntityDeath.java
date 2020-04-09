@@ -28,11 +28,10 @@ public class OnEntityDeath implements Listener{
 
 
         if (entity.getType() != EntityType.PLAYER) {
-            if(MobStacker.getInstance().getEntityStacker().getEntitiesToMultiplyOnDeath().contains(entity) || (entity.getKiller() != null && MobStacker.getInstance().getEntityStacker().getInstantKillPlayers().contains(entity.getKiller().getName()))){
+            if(MobStacker.getInstance().getEntityStacker().getEntitiesToMultiplyOnDeath().contains(entity) || (entity.getKiller() != null && entity.getKiller().hasPermission("mobstacker.killstack"))){
                 MobStacker.getInstance().getEntityStacker().getEntitiesToMultiplyOnDeath().remove(entity);
                 e.setDroppedExp(e.getDroppedExp() * multiplyDropsReturnExp(entity,e.getDrops()));
                 return;
-
             }
             MobStacker.getInstance().getStackEntity().attemptUnstackOne(entity);
         }

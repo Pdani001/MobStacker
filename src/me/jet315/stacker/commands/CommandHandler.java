@@ -1,8 +1,8 @@
 package me.jet315.stacker.commands;
 
+import com.sun.istack.internal.NotNull;
 import me.jet315.stacker.commands.admincommands.KillAllCommand;
 import me.jet315.stacker.commands.admincommands.ReloadCommand;
-import me.jet315.stacker.commands.defaultcommands.KillStack;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -23,9 +23,8 @@ public class CommandHandler implements org.bukkit.command.CommandExecutor {
     public CommandHandler() {
         commands.put("reload", new ReloadCommand());
         commands.put("killall", new KillAllCommand());
-        commands.put("killstack", new KillStack());
     }
-
+    
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
 
         if (cmd.getName().equalsIgnoreCase("mobstacker")) {
@@ -35,7 +34,6 @@ public class CommandHandler implements org.bukkit.command.CommandExecutor {
                 if(sender.hasPermission("mobstacker.admin")){
                     stringBuilder.append(ChatColor.translateAlternateColorCodes('&',"&a&l/MS reload &e- &aUsed to reload the configuration file\n"));
                     stringBuilder.append(ChatColor.translateAlternateColorCodes('&',"&a&l/MS killall &e- &aUsed to kill all living entities (Apart from Tamed, Leashed & those in a disabled world)\n"));
-                    stringBuilder.append(ChatColor.translateAlternateColorCodes('&',"&a&l/MS killstack &e- &aUsed to kill the entire mob stack when killed\n"));
                 }
                 stringBuilder.append("&7&m----------&r &aCreated by  Jet315 (Spigot) &7&m----------");
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', stringBuilder.toString()));

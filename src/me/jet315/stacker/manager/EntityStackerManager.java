@@ -23,8 +23,6 @@ public class EntityStackerManager {
     private ArrayList<LivingEntity> validEnity = new ArrayList<>();
     private ArrayList<LivingEntity> entitiesToMultiplyOnDeath = new ArrayList<>();
 
-    private ArrayList<String> instantKillPlayers = new ArrayList<>();
-
     public EntityStackerManager(int mobStackRadius, HashMap<EntityType,Integer> entitiesToStack) {
         this.mobStackRadius = mobStackRadius;
         this.entitiesToStack = entitiesToStack;
@@ -107,9 +105,5 @@ public class EntityStackerManager {
 
     public ArrayList<LivingEntity> getValidEntity() {
         return this.validEnity;
-    }
-
-    public ArrayList<String> getInstantKillPlayers() {
-        return instantKillPlayers;
     }
 }
