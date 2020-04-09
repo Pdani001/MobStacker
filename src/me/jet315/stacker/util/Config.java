@@ -107,6 +107,9 @@ public class Config {
     private void compileEntityTypesList(ConfigurationSection list) {
         if (list == null || list.getKeys(false).size() == 0) return; // List may be nothing
 
+        mobsToStack.clear();
+        mobsMinimum.clear();
+
         for (String entityName : list.getKeys(false)) {
             try {
                 EntityType entityType = EntityType.valueOf(entityName.toUpperCase());
